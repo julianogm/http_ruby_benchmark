@@ -25,28 +25,34 @@ http_gems = [
   { name: 'Faraday', method: -> { Faraday.get(URL) } },
   { name: 'HTTParty', method: -> { HTTParty.get(URL) } },
   { name: 'Typhoeus', method: -> { Typhoeus.get(URL) } },
-  { name: 'HTTPX', method: -> { HTTPX.get(URL) } },
-  { name: 'HTTPrb', method: -> { HTTP.get(URL) } },
+  { name: 'httpx', method: -> { HTTPX.get(URL) } },
+  { name: 'http.rb', method: -> { HTTP.get(URL) } },
 ]
 
-results_file = File.open('results.txt', 'w')
-results_file.puts "HTTP RubyGems Benchmark - #{Date.today}"
+
+readme_content = File.read('README.md')
+
+marker = "<!-- benchmark-results -->"
+results_index = readme_content.index(marker)
+
+results = "\n### HTTP RubyGems Benchmark - #{Date.today}\n"
 
 http_gems.each do |gem|
-  results_file.puts "\n#{gem[:name]}"
-  
+  results += "#### #{gem[:name]}\n"
+
   time = Benchmark.realtime do
     report = MemoryProfiler.report do
       gem[:method].call
     end
 
-    results_file.puts "Memory: #{report.total_allocated_memsize / 1024} KB"
-    results_file.puts "Allocations: #{report.total_allocated}"
+    results += "Memory: #{report.total_allocated_memsize / 1024} KB <br />"
+    results += "Allocations: #{report.total_allocated} <br />"
   end
-  
-  results_file.puts "Time: #{time.round(4)} seconds\n"
+
+  results += "Time: #{time.round(4)} seconds \n"
 end
 
-results_file.close
+new_readme_content = readme_content[0..results_index + marker.length] + results
+File.write('README.md', new_readme_content)
 
 local_server.shutdown
