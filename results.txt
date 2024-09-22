@@ -1,26 +1,31 @@
-Benchmark http rubygems - 2024-09-22
+HTTP RubyGems Benchmark - 2024-09-22
 
-Net::HTTP:
-Memory: 3156 KB
-Allocations: 667
-Time: 0.0618 seconds
+Net::HTTP
+Memory: 3141 KB
+Allocations: 668
+Time: 0.0777 seconds
 
-Faraday:
-Memory: 1095 KB
-Allocations: 770
-Time: 0.0609 seconds
+Faraday
+Memory: 1111 KB
+Allocations: 769
+Time: 0.0709 seconds
 
-HTTParty:
-Memory: 61 KB
-Allocations: 690
-Time: 0.061 seconds
+HTTParty
+Memory: 1083 KB
+Allocations: 662
+Time: 0.0702 seconds
 
-Typhoeus:
-Memory: 2110 KB
-Allocations: 700
-Time: 0.0614 seconds
+Typhoeus
+Memory: 2112 KB
+Allocations: 725
+Time: 0.0712 seconds
 
-HTTPX:
+HTTPX
 Memory: 1132 KB
 Allocations: 1197
-Time: 0.0658 seconds
+Time: 0.0731 seconds
+
+HTTP.rb
+Memory: 3468 KB
+Allocations: 37393
+Time: 0.1875 seconds

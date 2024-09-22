@@ -5,6 +5,7 @@ require 'faraday'
 require 'httparty'
 require 'typhoeus'
 require 'httpx'
+require 'http'
 require 'webrick'
 
 PORT = 8000
@@ -24,7 +25,8 @@ http_gems = [
   { name: 'Faraday', method: -> { Faraday.get(URL) } },
   { name: 'HTTParty', method: -> { HTTParty.get(URL) } },
   { name: 'Typhoeus', method: -> { Typhoeus.get(URL) } },
-  { name: 'HTTPX', method: -> { HTTPX.get(URL) } }
+  { name: 'HTTPX', method: -> { HTTPX.get(URL) } },
+  { name: 'HTTPrb', method: -> { HTTP.get(URL) } },
 ]
 
 results_file = File.open('results.txt', 'w')
