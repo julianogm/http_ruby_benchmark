@@ -8,5 +8,6 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 COPY benchmark.rb ./
+COPY README.md ./
 
 CMD ["ruby", "benchmark.rb"]

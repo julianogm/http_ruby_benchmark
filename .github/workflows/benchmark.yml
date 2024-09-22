@@ -24,19 +24,12 @@ jobs:
         run: |
           docker build -t benchmark-image .
           docker run --name benchmark-container benchmark-image
-
-      # - name: Set up dependencies
-      #   run: |
-      #     apk add --no-cache build-base libcurl curl-dev git
-      #     bundle install
-
-      # - name: Run benchmark script
-      #   run: ruby benchmark.rb
+          docker cp benchmark-container:/app/README.md ./README.md
 
       - name: Commit and push updated README
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git add README.md
-          git commit -m "Update benchmark results" || echo "no changes to commit"
+          git commit -m "Update benchmark results"
           git push
