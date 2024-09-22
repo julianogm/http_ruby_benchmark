@@ -10,29 +10,33 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
 
-    container:
-      image: ruby:3.2-alpine
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          fetch-depth: 0
+          ruby-version: "3.2"
+          bundler-cache: true
 
-      - name: Set up dependencies
+      - name: Run benchmark in Docker
         run: |
-          apk add --no-cache build-base libcurl curl-dev git
-          bundle install
+          docker build -t benchmark-image .
+          docker run --name benchmark-container benchmark-image
 
-      - name: Run benchmark script
-        run: ruby benchmark.rb
+      # - name: Set up dependencies
+      #   run: |
+      #     apk add --no-cache build-base libcurl curl-dev git
+      #     bundle install
+
+      # - name: Run benchmark script
+      #   run: ruby benchmark.rb
 
       - name: Commit and push updated README
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git add README.md
-          git commit -m "Update benchmark results"
+          git commit -m "Update benchmark results" || echo "no changes to commit"
           git push
