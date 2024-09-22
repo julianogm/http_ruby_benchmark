@@ -61,6 +61,7 @@ GEM
     typhoeus (1.4.1)
       ethon (>= 0.9.0)
     uri (0.13.1)
+    webrick (1.8.1)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -82,6 +83,7 @@ DEPENDENCIES
   httpx
   memory_profiler
   typhoeus
+  webrick
 
 BUNDLED WITH
    2.5.11
