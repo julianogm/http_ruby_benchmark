@@ -27,19 +27,24 @@ http_gems = [
   { name: 'HTTPX', method: -> { HTTPX.get(URL) } }
 ]
 
+results_file = File.open('results.txt', 'w')
+results_file.puts "HTTP RubyGems Benchmark - #{Date.today}"
+
 http_gems.each do |gem|
-  puts "Benchmarking #{gem[:name]}:"
+  results_file.puts "\n#{gem[:name]}"
   
   time = Benchmark.realtime do
     report = MemoryProfiler.report do
       gem[:method].call
     end
 
-    puts "Memory: #{report.total_allocated_memsize / 1024} KB"
-    puts "Allocations: #{report.total_allocated}"
+    results_file.puts "Memory: #{report.total_allocated_memsize / 1024} KB"
+    results_file.puts "Allocations: #{report.total_allocated}"
   end
   
-  puts "Time: #{time.round(4)} seconds\n"
+  results_file.puts "Time: #{time.round(4)} seconds\n"
 end
+
+results_file.close
 
 local_server.shutdown
