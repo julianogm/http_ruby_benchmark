@@ -4,16 +4,16 @@ Simple benchmark script to measure the memory consumed and the request time of s
 
 <!-- benchmark-results -->
 
-### HTTP RubyGems Benchmark - 2025-09-15
+### HTTP RubyGems Benchmark - 2025-09-29
 #### Net::HTTP
-Memory: 3141 KB <br />Allocations: 685 <br />Time: 0.0609 seconds 
+Memory: 3136 KB <br />Allocations: 621 <br />Time: 0.0632 seconds 
 #### Faraday
-Memory: 1094 KB <br />Allocations: 783 <br />Time: 0.0547 seconds 
+Memory: 1111 KB <br />Allocations: 800 <br />Time: 0.0601 seconds 
 #### HTTParty
-Memory: 1083 KB <br />Allocations: 672 <br />Time: 0.0546 seconds 
+Memory: 1099 KB <br />Allocations: 673 <br />Time: 0.0577 seconds 
 #### Typhoeus
-Memory: 2110 KB <br />Allocations: 726 <br />Time: 0.0598 seconds 
+Memory: 2109 KB <br />Allocations: 714 <br />Time: 0.0648 seconds 
 #### httpx
-Memory: 1125 KB <br />Allocations: 1150 <br />Time: 0.0603 seconds 
+Memory: 1125 KB <br />Allocations: 1158 <br />Time: 0.0603 seconds 
 #### http.rb
-Memory: 3457 KB <br />Allocations: 37342 <br />Time: 0.2197 seconds 
+Memory: 3456 KB <br />Allocations: 37334 <br />Time: 0.2251 seconds 
