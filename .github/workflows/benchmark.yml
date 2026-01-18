@@ -76,11 +76,6 @@ jobs:
           echo "Files ready for consolidation:"
           ls -lh benchmark_latest_* 2>/dev/null || echo "No scenario files found"
 
-      - name: Remove temporary scenario files (no longer needed)
-        run: |
-          rm -f benchmark_latest*.json benchmark_latest*.csv || true
-          echo "Removed temporary files"
-
       - name: Run consolidation script
         run: |
           ruby consolidate_results.rb
@@ -89,10 +84,10 @@ jobs:
           echo "---"
           ls -lh README.md
 
-      - name: Checkout original README (to preserve manual edits)
+      - name: Remove temporary scenario files (cleanup after consolidation)
         run: |
-          git checkout HEAD -- README.md || true
-          echo "Original README restored"
+          rm -f benchmark_latest*.json benchmark_latest*.csv || true
+          echo "Removed temporary files"
 
       - name: Check if files changed
         id: check_changes

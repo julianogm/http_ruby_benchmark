@@ -66,36 +66,3 @@ When analyzing the results:
 
 <!-- benchmark-results -->
 
-**Light (1 KB)** (1 KB, 50 requisições)
-
-| Gem | Memory (KB) | Allocations | Time (s) |
-|-----|-----------|------------|----------|
-| Net::HTTP | 1143 | 622 | 0.077 |
-| Faraday | 1099 | 630 | 0.0662 |
-| HTTParty | 1011 | 579 | 0.0724 |
-| Typhoeus | 82 | 552 | 0.0644 |
-| httpx | 1084 | 944 | 0.0678 |
-| http.rb | 1159 | 1530 | 0.0874 |
-
-**Normal (100 KB)** (100 KB, 30 requisições)
-
-| Gem | Memory (KB) | Allocations | Time (s) |
-|-----|-----------|------------|----------|
-| Net::HTTP | 1402 | 632 | 0.0714 |
-| Faraday | 1329 | 638 | 0.0691 |
-| HTTParty | 1251 | 585 | 0.0694 |
-| Typhoeus | 215 | 572 | 0.0652 |
-| httpx | 421 | 1060 | 0.0723 |
-| http.rb | 1191 | 2016 | 0.0866 |
-
-**Heavy (1 MB)** (1024 KB, 10 requisições)
-
-| Gem | Memory (KB) | Allocations | Time (s) |
-|-----|-----------|------------|----------|
-| Net::HTTP | 4370 | 689 | 0.0827 |
-| Faraday | 4160 | 701 | 0.0839 |
-| HTTParty | 4156 | 645 | 0.0821 |
-| Typhoeus | 1489 | 749 | 0.0701 |
-| httpx | 2294 | 1698 | 0.0949 |
-| http.rb | 1346 | 4444 | 0.1084 |
-
