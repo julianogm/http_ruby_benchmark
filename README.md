@@ -98,16 +98,16 @@ schedule:
 
 <!-- benchmark-results -->
 
-### HTTP RubyGems Benchmark - 2026-01-15
+### HTTP RubyGems Benchmark - 2026-01-18
 #### Net::HTTP
-Memory: 3141 KB <br />Allocations: 677 <br />Time: 0.0583 seconds 
+Memory: 1292 KB <br />Allocations: 624 <br />Time: 0.088 seconds 
 #### Faraday
-Memory: 1112 KB <br />Allocations: 803 <br />Time: 0.0537 seconds 
+Memory: 1087 KB <br />Allocations: 634 <br />Time: 0.0955 seconds 
 #### HTTParty
-Memory: 1082 KB <br />Allocations: 663 <br />Time: 0.0515 seconds 
+Memory: 67 KB <br />Allocations: 581 <br />Time: 0.089 seconds 
 #### Typhoeus
-Memory: 2110 KB <br />Allocations: 726 <br />Time: 0.0583 seconds 
+Memory: 247 KB <br />Allocations: 560 <br />Time: 0.0841 seconds 
 #### httpx
-Memory: 1125 KB <br />Allocations: 1150 <br />Time: 0.0566 seconds 
+Memory: 898 KB <br />Allocations: 964 <br />Time: 0.0951 seconds 
 #### http.rb
-Memory: 3457 KB <br />Allocations: 37342 <br />Time: 0.2245 seconds 
+Memory: 1345 KB <br />Allocations: 4442 <br />Time: 0.1298 seconds 
