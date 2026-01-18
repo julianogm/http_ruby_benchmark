@@ -66,3 +66,39 @@ When analyzing the results:
 
 <!-- benchmark-results -->
 
+### HTTP RubyGems Benchmark - 2026-01-18
+#### Consolidated Results (Light + Normal + Heavy)
+
+**Light (1 KB)** (1 KB, 50 requests)
+
+| Gem | Memory (KB) | Allocations | Time (s) |
+|-----|-----------|------------|----------|
+| Net::HTTP | 1142 | 621 | 0.0539 |
+| Faraday | 1098 | 623 | 0.0536 |
+| HTTParty | 622 | 578 | 0.0539 |
+| Typhoeus | 82 | 552 | 0.054 |
+| httpx | 1023 | 951 | 0.0571 |
+| http.rb | 1159 | 1530 | 0.0826 |
+
+**Normal (100 KB)** (100 KB, 30 requests)
+
+| Gem | Memory (KB) | Allocations | Time (s) |
+|-----|-----------|------------|----------|
+| Net::HTTP | 1392 | 630 | 0.052 |
+| Faraday | 1322 | 637 | 0.0532 |
+| HTTParty | 1315 | 585 | 0.0527 |
+| Typhoeus | 214 | 571 | 0.052 |
+| httpx | 420 | 1059 | 0.0559 |
+| http.rb | 1190 | 2017 | 0.0761 |
+
+**Heavy (1 MB)** (1024 KB, 10 requests)
+
+| Gem | Memory (KB) | Allocations | Time (s) |
+|-----|-----------|------------|----------|
+| Net::HTTP | 4376 | 689 | 0.0658 |
+| Faraday | 4169 | 701 | 0.0648 |
+| HTTParty | 4166 | 644 | 0.0642 |
+| Typhoeus | 1489 | 749 | 0.0655 |
+| httpx | 2286 | 1702 | 0.0736 |
+| http.rb | 1348 | 4455 | 0.1006 |
+
