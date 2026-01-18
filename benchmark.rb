@@ -7,6 +7,9 @@ require 'typhoeus'
 require 'httpx'
 require 'http'
 require 'webrick'
+require 'json'
+require 'csv'
+require 'date'
 
 PORT = 8000
 REQUESTS_PER_GEM = 10
@@ -52,6 +55,12 @@ marker = "<!-- benchmark-results -->"
 results_index = readme_content.index(marker)
 
 results = "\n### HTTP RubyGems Benchmark - #{Date.today}\n"
+json_results = {
+  timestamp: Time.now.iso8601,
+  date: Date.today.to_s,
+  requests_per_gem: REQUESTS_PER_GEM,
+  gems: []
+}
 
 http_gems.each do |gem|
   begin
@@ -81,9 +90,20 @@ http_gems.each do |gem|
     results += "Allocations: #{avg_allocations} <br />"
     results += "Time: #{avg_time} seconds \n"
 
+    json_results[:gems] << {
+      name: gem[:name],
+      memory_kb: avg_memory,
+      allocations: avg_allocations,
+      time_seconds: avg_time
+    }
+
     puts "✓ #{gem[:name]} - #{avg_time}s"
   rescue => e
     results += "❌ Erro: #{e.message}\n"
+    json_results[:gems] << {
+      name: gem[:name],
+      error: e.message
+    }
     puts "❌ Erro ao testar #{gem[:name]}: #{e.message}"
   end
 end
@@ -91,9 +111,45 @@ end
 begin
   new_readme_content = readme_content[0..results_index + marker.length] + results
   File.write('README.md', new_readme_content)
-  puts "\n✓ Resultados salvos em README.md"
+  puts "✓ Resultados salvos em README.md"
+
+  # JSON report
+  json_file = "benchmark_results_#{Date.today}.json"
+  File.write(json_file, JSON.pretty_generate(json_results))
+  puts "✓ Relatório JSON salvo em #{json_file}"
+
+  File.write('benchmark_latest.json', JSON.pretty_generate(json_results))
+  puts "✓ Últimos resultados salvos em benchmark_latest.json"
+
+  # CSV report
+  csv_file = "benchmark_results_#{Date.today}.csv"
+  CSV.open(csv_file, 'w') do |csv|
+    csv << ['Gem', 'Memory (KB)', 'Allocations', 'Time (seconds)']
+    json_results[:gems].each do |gem|
+      if gem[:error]
+        csv << [gem[:name], 'ERROR', gem[:error], '']
+      else
+        csv << [gem[:name], gem[:memory_kb], gem[:allocations], gem[:time_seconds]]
+      end
+    end
+  end
+  puts "✓ Relatório CSV salvo em #{csv_file}"
+
+  csv_latest = "benchmark_latest.csv"
+  CSV.open(csv_latest, 'w') do |csv|
+    csv << ['Gem', 'Memory (KB)', 'Allocations', 'Time (seconds)']
+    json_results[:gems].each do |gem|
+      if gem[:error]
+        csv << [gem[:name], 'ERROR', gem[:error], '']
+      else
+        csv << [gem[:name], gem[:memory_kb], gem[:allocations], gem[:time_seconds]]
+      end
+    end
+  end
+  puts "✓ Últimos resultados CSV salvos em #{csv_latest}"
+
 rescue => e
-  puts "❌ Erro ao salvar README.md: #{e.message}"
+  puts "❌ Erro ao salvar relatórios: #{e.message}"
 ensure
   local_server.shutdown
 end

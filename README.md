@@ -36,12 +36,62 @@ Os resultados são adicionados automaticamente ao final deste arquivo, em ordem 
 - **Alocações altas** = Mais pressão no garbage collector
 - **Cada execução faz 10 requisições** para resultados mais confiáveis
 
+## � Formatos de Relatório
+
+O script gera automaticamente relatórios em múltiplos formatos:
+
+- **`README.md`** - Histórico de resultados em markdown (atualizado automaticamente)
+- **`benchmark_latest.json`** - Últimos resultados em JSON (formato estruturado)
+- **`benchmark_results_YYYY-MM-DD.json`** - Histórico datado em JSON
+- **`benchmark_latest.csv`** - Últimos resultados em CSV (para importar em Excel/Sheets)
+- **`benchmark_results_YYYY-MM-DD.csv`** - Histórico datado em CSV
+
+### Exemplo de saída JSON
+
+```json
+{
+  "timestamp": "2026-01-18T16:20:38+00:00",
+  "date": "2026-01-18",
+  "requests_per_gem": 10,
+  "gems": [
+    {
+      "name": "Net::HTTP",
+      "memory_kb": 1289,
+      "allocations": 627,
+      "time_seconds": 0.0662
+    }
+  ]
+}
+```
+
+## 🔄 CI/CD Automático
+
+Este projeto usa **GitHub Actions** para executar benchmarks automaticamente:
+
+- **Schedule**: A cada 14 dias (pode ser customizado)
+- **Manual**: Via `workflow_dispatch` (botão "Run workflow" no GitHub)
+- **Resultados**: São commitados automaticamente no README.md
+- **Artifacts**: Histórico de JSONs e CSVs guardado por 90 dias
+
+### Como rodar manualmente
+
+1. Vá para a aba **Actions** no GitHub
+2. Selecione **HTTP Ruby Benchmark**
+3. Clique em **Run workflow**
+
 ## 🔧 Configuração
 
 Para ajustar o número de requisições por gem, edite a constante em `benchmark.rb`:
 
 ```ruby
 REQUESTS_PER_GEM = 10  # Aumentar para mais precisão, diminuir para testes rápidos
+```
+
+Para alterar a frequência do benchmark automático, edite `.github/workflows/benchmark.yml`:
+
+```yaml
+schedule:
+  - cron: "0 0 */14 * *"  # A cada 14 dias às 00:00 UTC
 ```
 
 <!-- benchmark-results -->

@@ -24,3 +24,9 @@ Thumbs.db
 tmp/
 .env
 .env.local
+
+# Benchmark reports (local, CI generates these)
+benchmark_results_*.json
+benchmark_results_*.csv
+benchmark_latest.json
+benchmark_latest.csv
