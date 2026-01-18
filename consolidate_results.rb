@@ -28,23 +28,23 @@ def consolidate_json
         requests_per_gem: data['requests_per_gem'],
         gems: data['gems']
       }
-      puts "✓ Incluído cenário #{scenario}"
+      puts "✓ Scenario #{scenario} included"
       files_to_delete << json_file
     else
-      puts "⚠ Arquivo não encontrado: #{json_file}"
+      puts "⚠ File not found: #{json_file}"
     end
   end
 
   # Save consolidated JSON
-  output_file = "benchmark_consolidated.json"
+  output_file = "benchmark_results.json"
   File.write(output_file, JSON.pretty_generate(consolidated))
-  puts "✓ JSON consolidado salvo em #{output_file}"
+  puts "✓ Consolidated JSON saved to #{output_file}"
 
   [consolidated, files_to_delete]
 end
 
 def consolidate_csv(consolidated, files_to_delete)
-  csv_file = "benchmark_consolidated.csv"
+  csv_file = "benchmark_results.csv"
   
   CSV.open(csv_file, 'w') do |csv|
     # Header
@@ -63,7 +63,7 @@ def consolidate_csv(consolidated, files_to_delete)
     end
   end
 
-  puts "✓ CSV consolidado salvo em #{csv_file}"
+  puts "✓ Consolidated CSV saved to #{csv_file}"
   
   SCENARIOS.each do |scenario|
     csv_name = "benchmark_latest_#{scenario}.csv"
@@ -74,32 +74,32 @@ def consolidate_csv(consolidated, files_to_delete)
 end
 
 def cleanup_individual_files(files_to_delete)
-  puts "\n🗑 Limpando arquivos individuais..."
+  puts "\n🗑 Cleaning up individual files..."
   
   files_to_delete.each do |file|
     if File.exist?(file)
       File.delete(file)
-      puts "✓ Deletado: #{file}"
+      puts "✓ Deleted: #{file}"
     end
   end
 
   ['benchmark_latest.json', 'benchmark_latest.csv'].each do |alias_file|
     if File.exist?(alias_file)
       File.delete(alias_file)
-      puts "✓ Deletado: #{alias_file}"
+      puts "✓ Deleted: #{alias_file}"
     end
   end
   
-  puts "✅ Limpeza concluída"
+  puts "✅ Cleanup complete"
 end
 
 def update_readme(consolidated)
-  puts "\n📝 Atualizando README.md com resultados consolidados..."
+  puts "\n📝 Updating README.md with consolidated results..."
 
   begin
     readme_content = File.read('README.md')
   rescue => e
-    puts "⚠ README.md não encontrado, ignorando atualização: #{e.message}"
+    puts "⚠ README.md not found, skipping update: #{e.message}"
     return
   end
 
@@ -107,7 +107,7 @@ def update_readme(consolidated)
   results_index = readme_content.index(marker)
 
   unless results_index
-    puts "⚠ Marker '#{marker}' não encontrado no README"
+    puts "⚠ Marker '#{marker}' not found in README"
     return
   end
 
@@ -115,7 +115,7 @@ def update_readme(consolidated)
   results += "#### Consolidated Results (Light + Normal + Heavy)\n\n"
 
   consolidated[:scenarios].each do |scenario, data|
-    results += "**#{data[:name]}** (#{data[:payload_size] / 1024} KB, #{data[:requests_per_gem]} requisições)\n\n"
+    results += "**#{data[:name]}** (#{data[:payload_size] / 1024} KB, #{data[:requests_per_gem]} requests)\n\n"
     results += "| Gem | Memory (KB) | Allocations | Time (s) |\n"
     results += "|-----|-----------|------------|----------|\n"
 
@@ -132,18 +132,18 @@ def update_readme(consolidated)
 
   new_readme_content = readme_content[0..results_index + marker.length] + results
   File.write('README.md', new_readme_content)
-  puts "✓ README.md atualizado com dados consolidados"
+  puts "✓ README.md updated with consolidated results"
 end
 
-puts "\n📊 Consolidando resultados dos 3 cenários...\n"
+puts "\n📊 Consolidating results from 3 scenarios...\n"
 
 consolidated, files_to_delete = consolidate_json
 consolidate_csv(consolidated, files_to_delete)
 cleanup_individual_files(files_to_delete)
 update_readme(consolidated)
 
-puts "\n✅ Consolidação e atualização completas!"
-puts "Arquivos finais:"
-puts "  - benchmark_consolidated.json"
-puts "  - benchmark_consolidated.csv"
-puts "  - README.md (atualizado)"
+puts "\n✅ Consolidation and update complete!"
+puts "Final files:"
+puts "  - benchmark_results.json"
+puts "  - benchmark_results.csv"
+puts "  - README.md (updated)"

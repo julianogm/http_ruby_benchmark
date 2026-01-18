@@ -35,8 +35,8 @@ SCENARIOS = {
 SCENARIO = ARGV[0] || 'normal'
 
 if !SCENARIOS.key?(SCENARIO)
-  puts "❌ Cenário inválido: #{SCENARIO}"
-  puts "Cenários disponíveis: #{SCENARIOS.keys.join(', ')}"
+  puts "❌ Invalid scenario: #{SCENARIO}"
+  puts "Available scenarios: #{SCENARIOS.keys.join(', ')}"
   exit 1
 end
 
@@ -44,10 +44,10 @@ CURRENT_SCENARIO = SCENARIOS[SCENARIO]
 REQUESTS_PER_GEM = CURRENT_SCENARIO[:requests]
 PAYLOAD_SIZE = CURRENT_SCENARIO[:payload_size]
 
-puts "\n📊 Benchmark - Cenário: #{CURRENT_SCENARIO[:name]}"
+puts "\n📊 Benchmark - Scenario: #{CURRENT_SCENARIO[:name]}"
 puts "   #{CURRENT_SCENARIO[:description]}"
-puts "   Requisições por gem: #{REQUESTS_PER_GEM}"
-puts "   Tamanho do payload: #{PAYLOAD_SIZE / 1024} KB\n\n"
+puts "   Requests per gem: #{REQUESTS_PER_GEM}"
+puts "   Payload size: #{PAYLOAD_SIZE / 1024} KB\n\n"
 
 PORT = 8000
 
@@ -67,7 +67,7 @@ begin
   server_thread = Thread.new { local_server.start }
   sleep(2) # wait server start to run script
 rescue => e
-  puts "❌ Erro ao iniciar servidor: #{e.message}"
+  puts "❌ Error starting server: #{e.message}"
   exit 1
 end
 
@@ -85,7 +85,7 @@ http_gems = [
 begin
   readme_content = File.read('README.md')
 rescue => e
-  puts "❌ Erro ao ler README.md: #{e.message}"
+  puts "❌ Error reading README.md: #{e.message}"
   local_server.shutdown
   exit 1
 end
@@ -141,32 +141,32 @@ http_gems.each do |gem|
 
     puts "✓ #{gem[:name]} - #{avg_time}s"
   rescue => e
-    results += "❌ Erro: #{e.message}\n"
+    results += "❌ Error: #{e.message}\n"
     json_results[:gems] << {
       name: gem[:name],
       error: e.message
     }
-    puts "❌ Erro ao testar #{gem[:name]}: #{e.message}"
+    puts "❌ Error testing #{gem[:name]}: #{e.message}"
   end
 end
 
 begin
   new_readme_content = readme_content[0..results_index + marker.length] + results
   File.write('README.md', new_readme_content)
-  puts "\n✓ Resultados salvos em README.md"
+  puts "\n✓ Results saved to README.md"
 
   # JSON report with scenario
   json_file = "benchmark_results_#{SCENARIO}_#{Date.today}.json"
   File.write(json_file, JSON.pretty_generate(json_results))
-  puts "✓ Relatório JSON salvo em #{json_file}"
+  puts "✓ JSON report saved to #{json_file}"
 
   json_latest = "benchmark_latest_#{SCENARIO}.json"
   File.write(json_latest, JSON.pretty_generate(json_results))
-  puts "✓ Últimos resultados JSON salvo em #{json_latest}"
+  puts "✓ Latest JSON results saved to #{json_latest}"
 
   if SCENARIO == 'normal'
     File.write('benchmark_latest.json', JSON.pretty_generate(json_results))
-    puts "✓ Últimos resultados salvos em benchmark_latest.json"
+    puts "✓ Latest results saved to benchmark_latest.json"
   end
 
   # CSV report
@@ -181,7 +181,7 @@ begin
       end
     end
   end
-  puts "✓ Relatório CSV salvo em #{csv_file}"
+  puts "✓ CSV report saved to #{csv_file}"
 
   # Latest CSV for this scenario
   csv_latest = "benchmark_latest_#{SCENARIO}.csv"
@@ -195,17 +195,26 @@ begin
       end
     end
   end
-  puts "✓ Últimos resultados CSV salvos em #{csv_latest}"
+  puts "✓ Latest CSV results saved to #{csv_latest}"
 
   if SCENARIO == 'normal'
-    File.write('benchmark_latest.csv', JSON.pretty_generate(json_results))
-    puts "✓ Últimos resultados salvos em benchmark_latest.csv"
+    CSV.open('benchmark_latest.csv', 'w') do |csv|
+      csv << ['Gem', 'Memory (KB)', 'Allocations', 'Time (seconds)']
+      json_results[:gems].each do |gem|
+        if gem[:error]
+          csv << [gem[:name], 'ERROR', gem[:error], '']
+        else
+          csv << [gem[:name], gem[:memory_kb], gem[:allocations], gem[:time_seconds]]
+        end
+      end
+    end
+    puts "✓ Latest results saved to benchmark_latest.csv"
   end
 
 rescue => e
-  puts "❌ Erro ao salvar relatórios: #{e.message}"
+  puts "❌ Error saving reports: #{e.message}"
 ensure
   local_server.shutdown
 end
 
-puts "\n✅ Benchmark completo!"
+puts "\n✅ Benchmark complete!"

@@ -80,7 +80,7 @@ jobs:
         run: |
           ruby consolidate_results.rb
           echo "---"
-          ls -lh benchmark_consolidated.*
+          ls -lh benchmark_results.*
           echo "---"
           ls -lh README.md
 
@@ -92,7 +92,7 @@ jobs:
       - name: Check if files changed
         id: check_changes
         run: |
-          if git diff --quiet README.md benchmark_consolidated.* 2>/dev/null; then
+          if git diff --quiet README.md benchmark_results.* 2>/dev/null; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -104,8 +104,8 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           echo "Files to commit:"
-          ls -lh benchmark_consolidated.* README.md
-          git add README.md benchmark_consolidated.*
+          ls -lh benchmark_results.* README.md
+          git add README.md benchmark_results.*
           git status
           git commit -m "chore: update benchmark results for all scenarios [skip ci]"
           git push
