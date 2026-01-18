@@ -9,14 +9,25 @@ require 'http'
 require 'webrick'
 
 PORT = 8000
-local_server = WEBrick::HTTPServer.new(Port: PORT)
+REQUESTS_PER_GEM = 10
 
-local_server.mount_proc '/' do |req, res|
-  res.body = 'Http Gems Benchmark'
+begin
+  local_server = WEBrick::HTTPServer.new(
+    Port: PORT,
+    AccessLog: [],
+    Logger: WEBrick::Log.new("/dev/null")
+  )
+
+  local_server.mount_proc '/' do |req, res|
+    res.body = 'Http Gems Benchmark'
+  end
+
+  server_thread = Thread.new { local_server.start }
+  sleep(2) # wait server start to run script
+rescue => e
+  puts "❌ Erro ao iniciar servidor: #{e.message}"
+  exit 1
 end
-
-Thread.new { local_server.start }
-sleep(2) # wait server start to run script
 
 URL = "http://localhost:#{PORT}"
 
@@ -29,8 +40,13 @@ http_gems = [
   { name: 'http.rb', method: -> { HTTP.get(URL) } },
 ]
 
-
-readme_content = File.read('README.md')
+begin
+  readme_content = File.read('README.md')
+rescue => e
+  puts "❌ Erro ao ler README.md: #{e.message}"
+  local_server.shutdown
+  exit 1
+end
 
 marker = "<!-- benchmark-results -->"
 results_index = readme_content.index(marker)
@@ -38,21 +54,46 @@ results_index = readme_content.index(marker)
 results = "\n### HTTP RubyGems Benchmark - #{Date.today}\n"
 
 http_gems.each do |gem|
-  results += "#### #{gem[:name]}\n"
+  begin
+    results += "#### #{gem[:name]}\n"
 
-  time = Benchmark.realtime do
-    report = MemoryProfiler.report do
-      gem[:method].call
+    total_time = 0
+    total_memory = 0
+    total_allocations = 0
+
+    REQUESTS_PER_GEM.times do
+      time = Benchmark.realtime do
+        report = MemoryProfiler.report do
+          gem[:method].call
+        end
+
+        total_memory += report.total_allocated_memsize
+        total_allocations += report.total_allocated
+      end
+      total_time += time
     end
 
-    results += "Memory: #{report.total_allocated_memsize / 1024} KB <br />"
-    results += "Allocations: #{report.total_allocated} <br />"
-  end
+    avg_memory = (total_memory / REQUESTS_PER_GEM) / 1024
+    avg_allocations = (total_allocations / REQUESTS_PER_GEM).round(0)
+    avg_time = (total_time / REQUESTS_PER_GEM).round(4)
 
-  results += "Time: #{time.round(4)} seconds \n"
+    results += "Memory: #{avg_memory} KB <br />"
+    results += "Allocations: #{avg_allocations} <br />"
+    results += "Time: #{avg_time} seconds \n"
+
+    puts "✓ #{gem[:name]} - #{avg_time}s"
+  rescue => e
+    results += "❌ Erro: #{e.message}\n"
+    puts "❌ Erro ao testar #{gem[:name]}: #{e.message}"
+  end
 end
 
-new_readme_content = readme_content[0..results_index + marker.length] + results
-File.write('README.md', new_readme_content)
-
-local_server.shutdown
+begin
+  new_readme_content = readme_content[0..results_index + marker.length] + results
+  File.write('README.md', new_readme_content)
+  puts "\n✓ Resultados salvos em README.md"
+rescue => e
+  puts "❌ Erro ao salvar README.md: #{e.message}"
+ensure
+  local_server.shutdown
+end
