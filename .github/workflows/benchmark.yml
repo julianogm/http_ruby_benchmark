@@ -26,8 +26,10 @@ jobs:
       - name: Copy results from container
         run: |
           docker cp benchmark-container:/app/README.md ./README.md
-          docker cp benchmark-container:/app/benchmark_latest.json ./benchmark_latest.json 2>/dev/null || echo "Latest JSON not found"
-          docker cp benchmark-container:/app/benchmark_results_*.json . 2>/dev/null || echo "Dated JSON files not found"
+          docker cp benchmark-container:/app/benchmark_latest.json ./benchmark_latest.json
+          docker cp benchmark-container:/app/benchmark_latest.csv ./benchmark_latest.csv
+          echo "Files copied:"
+          ls -lh benchmark_latest.* README.md
 
       - name: Create results artifact
         uses: actions/upload-artifact@v4
@@ -35,13 +37,15 @@ jobs:
           name: benchmark-results
           path: |
             benchmark_latest.json
+            benchmark_latest.csv
             benchmark_results_*.json
+            benchmark_results_*.csv
           retention-days: 90
 
       - name: Check if files changed
         id: check_changes
         run: |
-          if git diff --quiet README.md; then
+          if git diff --quiet README.md benchmark_latest.json benchmark_latest.csv; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -52,10 +56,10 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          echo "Files to add:"
+          ls -lh benchmark_latest.* README.md
           git add README.md benchmark_latest.json benchmark_latest.csv
-          if ls benchmark_results_*.json 1> /dev/null 2>&1; then
-            git add benchmark_results_*.json benchmark_results_*.csv
-          fi
+          git status
           git commit -m "chore: update benchmark results [skip ci]"
           git push
 
