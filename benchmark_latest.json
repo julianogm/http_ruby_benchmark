@@ -1,43 +1,43 @@
 {
-  "timestamp": "2026-01-18T16:37:29+00:00",
+  "timestamp": "2026-01-18T16:43:36+00:00",
   "date": "2026-01-18",
   "requests_per_gem": 10,
   "gems": [
     {
       "name": "Net::HTTP",
-      "memory_kb": 1292,
+      "memory_kb": 1294,
       "allocations": 624,
-      "time_seconds": 0.088
+      "time_seconds": 0.0515
     },
     {
       "name": "Faraday",
-      "memory_kb": 1087,
+      "memory_kb": 1090,
       "allocations": 634,
-      "time_seconds": 0.0955
+      "time_seconds": 0.0515
     },
     {
       "name": "HTTParty",
-      "memory_kb": 67,
-      "allocations": 581,
-      "time_seconds": 0.089
+      "memory_kb": 877,
+      "allocations": 582,
+      "time_seconds": 0.0508
     },
     {
       "name": "Typhoeus",
       "memory_kb": 247,
       "allocations": 560,
-      "time_seconds": 0.0841
+      "time_seconds": 0.0508
     },
     {
       "name": "httpx",
-      "memory_kb": 898,
-      "allocations": 964,
-      "time_seconds": 0.0951
+      "memory_kb": 694,
+      "allocations": 968,
+      "time_seconds": 0.054
     },
     {
       "name": "http.rb",
-      "memory_kb": 1345,
-      "allocations": 4442,
-      "time_seconds": 0.1298
+      "memory_kb": 1347,
+      "allocations": 4452,
+      "time_seconds": 0.085
     }
   ]
 }

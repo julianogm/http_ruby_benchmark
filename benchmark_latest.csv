@@ -1,7 +1,7 @@
 Gem,Memory (KB),Allocations,Time (seconds)
-Net::HTTP,1289,627,0.0662
-Faraday,1082,639,0.0599
-HTTParty,1075,582,0.062
-Typhoeus,247,560,0.0607
-httpx,1000,961,0.0617
-http.rb,1346,4451,0.0981
+Net::HTTP,1294,624,0.0515
+Faraday,1090,634,0.0515
+HTTParty,877,582,0.0508
+Typhoeus,247,560,0.0508
+httpx,694,968,0.054
+http.rb,1347,4452,0.085

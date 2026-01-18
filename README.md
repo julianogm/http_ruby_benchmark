@@ -100,14 +100,14 @@ schedule:
 
 ### HTTP RubyGems Benchmark - 2026-01-18
 #### Net::HTTP
-Memory: 1292 KB <br />Allocations: 624 <br />Time: 0.088 seconds 
+Memory: 1294 KB <br />Allocations: 624 <br />Time: 0.0515 seconds 
 #### Faraday
-Memory: 1087 KB <br />Allocations: 634 <br />Time: 0.0955 seconds 
+Memory: 1090 KB <br />Allocations: 634 <br />Time: 0.0515 seconds 
 #### HTTParty
-Memory: 67 KB <br />Allocations: 581 <br />Time: 0.089 seconds 
+Memory: 877 KB <br />Allocations: 582 <br />Time: 0.0508 seconds 
 #### Typhoeus
-Memory: 247 KB <br />Allocations: 560 <br />Time: 0.0841 seconds 
+Memory: 247 KB <br />Allocations: 560 <br />Time: 0.0508 seconds 
 #### httpx
-Memory: 898 KB <br />Allocations: 964 <br />Time: 0.0951 seconds 
+Memory: 694 KB <br />Allocations: 968 <br />Time: 0.054 seconds 
 #### http.rb
-Memory: 1345 KB <br />Allocations: 4442 <br />Time: 0.1298 seconds 
+Memory: 1347 KB <br />Allocations: 4452 <br />Time: 0.085 seconds 
