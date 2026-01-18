@@ -70,6 +70,11 @@ jobs:
           mkdir -p results
           find ./artifacts -name "*.json" -o -name "*.csv" | xargs -I {} cp {} results/
           ls -lh results/
+          # Copy scenario files to root for consolidation script
+          cp results/benchmark_latest_*.json . || true
+          cp results/benchmark_latest_*.csv . || true
+          echo "Files ready for consolidation:"
+          ls -lh benchmark_latest_* 2>/dev/null || echo "No scenario files found"
 
       - name: Remove temporary scenario files (no longer needed)
         run: |

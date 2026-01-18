@@ -17,6 +17,9 @@ def consolidate_json
 
   files_to_delete = []
 
+  puts "📂 Looking for scenario files in current directory:"
+  Dir.glob("benchmark_latest_*.json").each { |f| puts "  Found: #{f}" }
+
   SCENARIOS.each do |scenario|
     json_file = "benchmark_latest_#{scenario}.json"
     
@@ -35,6 +38,10 @@ def consolidate_json
     end
   end
 
+  if consolidated[:scenarios].empty?
+    puts "❌ ERROR: No scenarios were consolidated! Check if benchmark_latest_*.json files exist."
+  end
+
   # Save consolidated JSON
   output_file = "benchmark_results.json"
   File.write(output_file, JSON.pretty_generate(consolidated))
@@ -45,6 +52,10 @@ end
 
 def consolidate_csv(consolidated, files_to_delete)
   csv_file = "benchmark_results.csv"
+  
+  if consolidated[:scenarios].empty?
+    puts "⚠ WARNING: No scenarios to consolidate into CSV. Creating empty file."
+  end
   
   CSV.open(csv_file, 'w') do |csv|
     # Header
@@ -136,6 +147,9 @@ def update_readme(consolidated)
 end
 
 puts "\n📊 Consolidating results from 3 scenarios...\n"
+puts "Current directory: #{Dir.pwd}"
+puts "Files in current directory:"
+Dir.glob("*").select { |f| f.include?("benchmark") }.each { |f| puts "  - #{f}" }
 
 consolidated, files_to_delete = consolidate_json
 consolidate_csv(consolidated, files_to_delete)
