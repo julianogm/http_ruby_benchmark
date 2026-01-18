@@ -41,10 +41,12 @@ Os resultados são adicionados automaticamente ao final deste arquivo, em ordem 
 O script gera automaticamente relatórios em múltiplos formatos:
 
 - **`README.md`** - Histórico de resultados em markdown (atualizado automaticamente)
-- **`benchmark_latest.json`** - Últimos resultados em JSON (formato estruturado)
-- **`benchmark_results_YYYY-MM-DD.json`** - Histórico datado em JSON
-- **`benchmark_latest.csv`** - Últimos resultados em CSV (para importar em Excel/Sheets)
-- **`benchmark_results_YYYY-MM-DD.csv`** - Histórico datado em CSV
+- **`benchmark_latest.json`** - Últimos resultados em JSON (formato estruturado, versionado)
+- **`benchmark_results_YYYY-MM-DD.json`** - Histórico datado em JSON (um arquivo por execução)
+- **`benchmark_latest.csv`** - Últimos resultados em CSV (para importar em Excel/Sheets, versionado)
+- **`benchmark_results_YYYY-MM-DD.csv`** - Histórico datado em CSV (um arquivo por execução)
+
+> **Nota**: Os arquivos `benchmark_latest.*` são versionados no Git e atualizado automaticamente pelo CI/CD. O histórico datado permite acompanhar performance ao longo do tempo.
 
 ### Exemplo de saída JSON
 
