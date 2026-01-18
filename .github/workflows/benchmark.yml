@@ -71,13 +71,10 @@ jobs:
           find ./artifacts -name "*.json" -o -name "*.csv" | xargs -I {} cp {} results/
           ls -lh results/
 
-      - name: Copy consolidated results to root
+      - name: Remove temporary scenario files (no longer needed)
         run: |
-          cp results/benchmark_latest_*.json . || true
-          cp results/benchmark_latest_*.csv . || true
-          cp results/benchmark_latest.json . || true
-          cp results/benchmark_latest.csv . || true
-          ls -lh benchmark_latest*
+          rm -f benchmark_latest*.json benchmark_latest*.csv || true
+          echo "Removed temporary files"
 
       - name: Run consolidation script
         run: |
@@ -107,8 +104,8 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           echo "Files to commit:"
-          ls -lh benchmark_latest_*.json benchmark_latest_*.csv benchmark_latest.json benchmark_latest.csv benchmark_consolidated.* 2>/dev/null || echo "Some files not found"
-          git add README.md benchmark_latest*.json benchmark_latest*.csv benchmark_consolidated.*
+          ls -lh benchmark_consolidated.* README.md
+          git add README.md benchmark_consolidated.*
           git status
           git commit -m "chore: update benchmark results for all scenarios [skip ci]"
           git push
