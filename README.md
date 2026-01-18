@@ -9,13 +9,35 @@ Este projeto executa benchmarks comparativos de diferentes bibliotecas HTTP em R
 - **Alocações**: Número total de alocações de objetos
 - **Tempo**: Tempo decorrido para executar as requisições
 
+## 🎯 Cenários de Teste
+
+Este projeto testa **3 cenários diferentes** para simular diferentes tipos de cargas reais:
+
+| Cenário | Tamanho | Requisições | Caso de Uso |
+|---------|---------|------------|-----------|
+| **Light** | 1 KB | 50 | Testa overhead do cliente (APIs rápidas, low-latency) |
+| **Normal** | 100 KB | 30 | Respostas médias (APIs típicas, padrão) |
+| **Heavy** | 1 MB | 10 | Alto volume de dados (downloads, grandes respostas) |
+
+Diferentes tamanhos revelam diferentes comportamentos:
+- **Light**: CPU-bound, testa overhead do protocolo HTTP
+- **Normal**: Caso de uso típico, equilíbrio entre CPU e I/O
+- **Heavy**: I/O-bound, testa eficiência em transferências grandes
+
 ## 🚀 Como usar
 
 ### Com Docker (Recomendado)
 
 ```bash
 docker build -t http-benchmark .
+
+# Cenário padrão (normal - 100 KB)
 docker run --rm http-benchmark
+
+# Ou execute um cenário específico:
+docker run --rm http-benchmark ruby benchmark.rb light    # 1 KB, 50 requisições
+docker run --rm http-benchmark ruby benchmark.rb normal   # 100 KB, 30 requisições
+docker run --rm http-benchmark ruby benchmark.rb heavy    # 1 MB, 10 requisições
 ```
 
 ### Localmente (requer Ruby 3.2+)
@@ -24,90 +46,59 @@ docker run --rm http-benchmark
 # Instalar dependências
 bundle install
 
-# Executar benchmark
+# Executar benchmark - cenário padrão
 ruby benchmark.rb
+
+# Ou execute um cenário específico:
+ruby benchmark.rb light
+ruby benchmark.rb normal
+ruby benchmark.rb heavy
 ```
 
 ## 📈 Interpretando os resultados
 
-Os resultados são adicionados automaticamente ao final deste arquivo, em ordem cronológica. 
+Ao analisar os resultados:
 
-- **Memoria baixa + Tempo baixo** = Melhor opção geral
-- **Alocações altas** = Mais pressão no garbage collector
-- **Cada execução faz 10 requisições** para resultados mais confiáveis
-
-## � Formatos de Relatório
-
-O script gera automaticamente relatórios em múltiplos formatos:
-
-- **`README.md`** - Histórico de resultados em markdown (atualizado automaticamente)
-- **`benchmark_latest.json`** - Últimos resultados em JSON (formato estruturado, versionado)
-- **`benchmark_results_YYYY-MM-DD.json`** - Histórico datado em JSON (um arquivo por execução)
-- **`benchmark_latest.csv`** - Últimos resultados em CSV (para importar em Excel/Sheets, versionado)
-- **`benchmark_results_YYYY-MM-DD.csv`** - Histórico datado em CSV (um arquivo por execução)
-
-> **Nota**: Os arquivos `benchmark_latest.*` são versionados no Git e atualizado automaticamente pelo CI/CD. O histórico datado permite acompanhar performance ao longo do tempo.
-
-### Exemplo de saída JSON
-
-```json
-{
-  "timestamp": "2026-01-18T16:20:38+00:00",
-  "date": "2026-01-18",
-  "requests_per_gem": 10,
-  "gems": [
-    {
-      "name": "Net::HTTP",
-      "memory_kb": 1289,
-      "allocations": 627,
-      "time_seconds": 0.0662
-    }
-  ]
-}
-```
-
-## 🔄 CI/CD Automático
-
-Este projeto usa **GitHub Actions** para executar benchmarks automaticamente:
-
-- **Schedule**: A cada 14 dias (pode ser customizado)
-- **Manual**: Via `workflow_dispatch` (botão "Run workflow" no GitHub)
-- **Resultados**: São commitados automaticamente no README.md
-- **Artifacts**: Histórico de JSONs e CSVs guardado por 90 dias
-
-### Como rodar manualmente
-
-1. Vá para a aba **Actions** no GitHub
-2. Selecione **HTTP Ruby Benchmark**
-3. Clique em **Run workflow**
-
-## 🔧 Configuração
-
-Para ajustar o número de requisições por gem, edite a constante em `benchmark.rb`:
-
-```ruby
-REQUESTS_PER_GEM = 10  # Aumentar para mais precisão, diminuir para testes rápidos
-```
-
-Para alterar a frequência do benchmark automático, edite `.github/workflows/benchmark.yml`:
-
-```yaml
-schedule:
-  - cron: "0 0 */14 * *"  # A cada 14 dias às 00:00 UTC
-```
+- **Memória baixa + Tempo baixo** = Melhor opção geral ✅
+- **Alocações altas** = Mais pressão no garbage collector (pior em produção)
+- **Comparar entre cenários** = Veja como cada lib escala com diferentes payloads
+- **Light vs Heavy** = Se performance muda muito, a lib é sensível ao tamanho de dados
 
 <!-- benchmark-results -->
 
 ### HTTP RubyGems Benchmark - 2026-01-18
-#### Net::HTTP
-Memory: 1297 KB <br />Allocations: 626 <br />Time: 0.0559 seconds 
-#### Faraday
-Memory: 1083 KB <br />Allocations: 630 <br />Time: 0.0537 seconds 
-#### HTTParty
-Memory: 978 KB <br />Allocations: 582 <br />Time: 0.0543 seconds 
-#### Typhoeus
-Memory: 247 KB <br />Allocations: 560 <br />Time: 0.0557 seconds 
-#### httpx
-Memory: 796 KB <br />Allocations: 966 <br />Time: 0.0581 seconds 
-#### http.rb
-Memory: 1346 KB <br />Allocations: 4450 <br />Time: 0.0983 seconds 
+#### Consolidated Results (Light + Normal + Heavy)
+
+**Light (1 KB)** (1 KB, 50 requisições)
+
+| Gem | Memory (KB) | Allocations | Time (s) |
+|-----|-----------|------------|----------|
+| Net::HTTP | 1143 | 622 | 0.077 |
+| Faraday | 1099 | 630 | 0.0662 |
+| HTTParty | 1011 | 579 | 0.0724 |
+| Typhoeus | 82 | 552 | 0.0644 |
+| httpx | 1084 | 944 | 0.0678 |
+| http.rb | 1159 | 1530 | 0.0874 |
+
+**Normal (100 KB)** (100 KB, 30 requisições)
+
+| Gem | Memory (KB) | Allocations | Time (s) |
+|-----|-----------|------------|----------|
+| Net::HTTP | 1402 | 632 | 0.0714 |
+| Faraday | 1329 | 638 | 0.0691 |
+| HTTParty | 1251 | 585 | 0.0694 |
+| Typhoeus | 215 | 572 | 0.0652 |
+| httpx | 421 | 1060 | 0.0723 |
+| http.rb | 1191 | 2016 | 0.0866 |
+
+**Heavy (1 MB)** (1024 KB, 10 requisições)
+
+| Gem | Memory (KB) | Allocations | Time (s) |
+|-----|-----------|------------|----------|
+| Net::HTTP | 4370 | 689 | 0.0827 |
+| Faraday | 4160 | 701 | 0.0839 |
+| HTTParty | 4156 | 645 | 0.0821 |
+| Typhoeus | 1489 | 749 | 0.0701 |
+| httpx | 2294 | 1698 | 0.0949 |
+| http.rb | 1346 | 4444 | 0.1084 |
+

@@ -11,8 +11,45 @@ require 'json'
 require 'csv'
 require 'date'
 
+SCENARIOS = {
+  'light' => {
+    name: 'Light (1 KB)',
+    payload_size: 1024,
+    requests: 50,
+    description: 'Small payloads - tests HTTP client overhead'
+  },
+  'normal' => {
+    name: 'Normal (100 KB)',
+    payload_size: 100 * 1024,
+    requests: 30,
+    description: 'Medium payloads - typical API responses'
+  },
+  'heavy' => {
+    name: 'Heavy (1 MB)',
+    payload_size: 1024 * 1024,
+    requests: 10,
+    description: 'Large payloads - high volume scenarios'
+  }
+}
+
+SCENARIO = ARGV[0] || 'normal'
+
+if !SCENARIOS.key?(SCENARIO)
+  puts "❌ Cenário inválido: #{SCENARIO}"
+  puts "Cenários disponíveis: #{SCENARIOS.keys.join(', ')}"
+  exit 1
+end
+
+CURRENT_SCENARIO = SCENARIOS[SCENARIO]
+REQUESTS_PER_GEM = CURRENT_SCENARIO[:requests]
+PAYLOAD_SIZE = CURRENT_SCENARIO[:payload_size]
+
+puts "\n📊 Benchmark - Cenário: #{CURRENT_SCENARIO[:name]}"
+puts "   #{CURRENT_SCENARIO[:description]}"
+puts "   Requisições por gem: #{REQUESTS_PER_GEM}"
+puts "   Tamanho do payload: #{PAYLOAD_SIZE / 1024} KB\n\n"
+
 PORT = 8000
-REQUESTS_PER_GEM = 10
 
 begin
   local_server = WEBrick::HTTPServer.new(
@@ -21,8 +58,10 @@ begin
     Logger: WEBrick::Log.new("/dev/null")
   )
 
+  payload = 'x' * PAYLOAD_SIZE
+
   local_server.mount_proc '/' do |req, res|
-    res.body = 'Http Gems Benchmark'
+    res.body = payload
   end
 
   server_thread = Thread.new { local_server.start }
@@ -54,11 +93,14 @@ end
 marker = "<!-- benchmark-results -->"
 results_index = readme_content.index(marker)
 
-results = "\n### HTTP RubyGems Benchmark - #{Date.today}\n"
+results = "\n### HTTP RubyGems Benchmark - #{Date.today} (#{CURRENT_SCENARIO[:name]})\n"
 json_results = {
   timestamp: Time.now.iso8601,
   date: Date.today.to_s,
+  scenario: SCENARIO,
+  scenario_name: CURRENT_SCENARIO[:name],
   requests_per_gem: REQUESTS_PER_GEM,
+  payload_size: PAYLOAD_SIZE,
   gems: []
 }
 
@@ -111,18 +153,24 @@ end
 begin
   new_readme_content = readme_content[0..results_index + marker.length] + results
   File.write('README.md', new_readme_content)
-  puts "✓ Resultados salvos em README.md"
+  puts "\n✓ Resultados salvos em README.md"
 
-  # JSON report
-  json_file = "benchmark_results_#{Date.today}.json"
+  # JSON report with scenario
+  json_file = "benchmark_results_#{SCENARIO}_#{Date.today}.json"
   File.write(json_file, JSON.pretty_generate(json_results))
   puts "✓ Relatório JSON salvo em #{json_file}"
 
-  File.write('benchmark_latest.json', JSON.pretty_generate(json_results))
-  puts "✓ Últimos resultados salvos em benchmark_latest.json"
+  json_latest = "benchmark_latest_#{SCENARIO}.json"
+  File.write(json_latest, JSON.pretty_generate(json_results))
+  puts "✓ Últimos resultados JSON salvo em #{json_latest}"
+
+  if SCENARIO == 'normal'
+    File.write('benchmark_latest.json', JSON.pretty_generate(json_results))
+    puts "✓ Últimos resultados salvos em benchmark_latest.json"
+  end
 
   # CSV report
-  csv_file = "benchmark_results_#{Date.today}.csv"
+  csv_file = "benchmark_results_#{SCENARIO}_#{Date.today}.csv"
   CSV.open(csv_file, 'w') do |csv|
     csv << ['Gem', 'Memory (KB)', 'Allocations', 'Time (seconds)']
     json_results[:gems].each do |gem|
@@ -135,7 +183,8 @@ begin
   end
   puts "✓ Relatório CSV salvo em #{csv_file}"
 
-  csv_latest = "benchmark_latest.csv"
+  # Latest CSV for this scenario
+  csv_latest = "benchmark_latest_#{SCENARIO}.csv"
   CSV.open(csv_latest, 'w') do |csv|
     csv << ['Gem', 'Memory (KB)', 'Allocations', 'Time (seconds)']
     json_results[:gems].each do |gem|
@@ -148,8 +197,15 @@ begin
   end
   puts "✓ Últimos resultados CSV salvos em #{csv_latest}"
 
+  if SCENARIO == 'normal'
+    File.write('benchmark_latest.csv', JSON.pretty_generate(json_results))
+    puts "✓ Últimos resultados salvos em benchmark_latest.csv"
+  end
+
 rescue => e
   puts "❌ Erro ao salvar relatórios: #{e.message}"
 ensure
   local_server.shutdown
 end
+
+puts "\n✅ Benchmark completo!"

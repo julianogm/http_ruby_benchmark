@@ -9,6 +9,9 @@ on:
 jobs:
   benchmark:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scenario: [light, normal, heavy]
 
     steps:
       - name: Checkout repository
@@ -20,32 +23,79 @@ jobs:
       - name: Build Docker image
         run: docker build -t benchmark-image .
 
-      - name: Run benchmark
-        run: docker run --name benchmark-container benchmark-image
+      - name: Run benchmark (${{ matrix.scenario }})
+        run: docker run --name benchmark-container-${{ matrix.scenario }} benchmark-image ruby benchmark.rb ${{ matrix.scenario }}
 
       - name: Copy results from container
         run: |
-          docker cp benchmark-container:/app/README.md ./README.md
-          docker cp benchmark-container:/app/benchmark_latest.json ./benchmark_latest.json
-          docker cp benchmark-container:/app/benchmark_latest.csv ./benchmark_latest.csv
-          echo "Files copied:"
-          ls -lh benchmark_latest.* README.md
+          docker cp benchmark-container-${{ matrix.scenario }}:/app/benchmark_latest_${{ matrix.scenario }}.json ./benchmark_latest_${{ matrix.scenario }}.json
+          docker cp benchmark-container-${{ matrix.scenario }}:/app/benchmark_latest_${{ matrix.scenario }}.csv ./benchmark_latest_${{ matrix.scenario }}.csv
+          echo "Files copied for scenario: ${{ matrix.scenario }}"
+          ls -lh benchmark_latest_${{ matrix.scenario }}.*
+
+      - name: Copy backward compatibility files (normal scenario)
+        if: matrix.scenario == 'normal'
+        run: |
+          docker cp benchmark-container-${{ matrix.scenario }}:/app/benchmark_latest.json ./benchmark_latest.json
+          docker cp benchmark-container-${{ matrix.scenario }}:/app/benchmark_latest.csv ./benchmark_latest.csv
+          echo "Backward compatibility files copied"
 
       - name: Create results artifact
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-results
+          name: benchmark-results-${{ matrix.scenario }}
           path: |
-            benchmark_latest.json
-            benchmark_latest.csv
-            benchmark_results_*.json
-            benchmark_results_*.csv
+            benchmark_latest_${{ matrix.scenario }}.json
+            benchmark_latest_${{ matrix.scenario }}.csv
+            benchmark_results_${{ matrix.scenario }}_*.json
+            benchmark_results_${{ matrix.scenario }}_*.csv
           retention-days: 90
+
+  commit-results:
+    needs: benchmark
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Consolidate results
+        run: |
+          mkdir -p results
+          find ./artifacts -name "*.json" -o -name "*.csv" | xargs -I {} cp {} results/
+          ls -lh results/
+
+      - name: Copy consolidated results to root
+        run: |
+          cp results/benchmark_latest_*.json . || true
+          cp results/benchmark_latest_*.csv . || true
+          cp results/benchmark_latest.json . || true
+          cp results/benchmark_latest.csv . || true
+          ls -lh benchmark_latest*
+
+      - name: Run consolidation script
+        run: |
+          ruby consolidate_results.rb
+          echo "---"
+          ls -lh benchmark_consolidated.*
+          echo "---"
+          ls -lh README.md
+
+      - name: Checkout original README (to preserve manual edits)
+        run: |
+          git checkout HEAD -- README.md || true
+          echo "Original README restored"
 
       - name: Check if files changed
         id: check_changes
         run: |
-          if git diff --quiet README.md benchmark_latest.json benchmark_latest.csv; then
+          if git diff --quiet README.md benchmark_consolidated.* 2>/dev/null; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -56,38 +106,10 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          echo "Files to add:"
-          ls -lh benchmark_latest.* README.md
-          git add README.md benchmark_latest.json benchmark_latest.csv
+          echo "Files to commit:"
+          ls -lh benchmark_latest_*.json benchmark_latest_*.csv benchmark_latest.json benchmark_latest.csv benchmark_consolidated.* 2>/dev/null || echo "Some files not found"
+          git add README.md benchmark_latest*.json benchmark_latest*.csv benchmark_consolidated.*
           git status
-          git commit -m "chore: update benchmark results [skip ci]"
+          git commit -m "chore: update benchmark results for all scenarios [skip ci]"
           git push
-
-      - name: Comment on PR if exists
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const latestJson = JSON.parse(fs.readFileSync('./benchmark_latest.json', 'utf8'));
-            
-            let comment = '## 📊 Benchmark Results\n\n';
-            comment += `**Timestamp**: ${latestJson.timestamp}\n\n`;
-            comment += '| Gem | Memory (KB) | Allocations | Time (s) |\n';
-            comment += '|-----|-----------|------------|----------|\n';
-            
-            latestJson.gems.forEach(gem => {
-              if (gem.error) {
-                comment += `| ${gem.name} | ❌ Error | - | - |\n`;
-              } else {
-                comment += `| ${gem.name} | ${gem.memory_kb} | ${gem.allocations} | ${gem.time_seconds} |\n`;
-              }
-            });
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
 

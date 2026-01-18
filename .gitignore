@@ -24,3 +24,10 @@ Thumbs.db
 tmp/
 .env
 .env.local
+
+# Benchmark individual results (cleaned up after consolidation)
+benchmark_latest_light.*
+benchmark_latest_normal.*
+benchmark_latest_heavy.*
+benchmark_results_*.*
+benchmark_latest.*
