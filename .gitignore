@@ -1,0 +1,26 @@
+# Ruby
+*.gem
+*.rbc
+.bundle
+vendor/bundle/
+Gemfile.lock
+.ruby-version
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+.env
+.env.local
