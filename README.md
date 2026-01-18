@@ -1,6 +1,48 @@
 # http_ruby_benchmark
 
-Simple benchmark script to measure the memory consumed and the request time of some HTTP client gems for ruby.
+Simple benchmark script to measure the memory consumed and the request time of some HTTP client gems for Ruby.
+
+## 📊 O que é?
+
+Este projeto executa benchmarks comparativos de diferentes bibliotecas HTTP em Ruby, medindo:
+- **Memória**: Total de memória alocada (em KB)
+- **Alocações**: Número total de alocações de objetos
+- **Tempo**: Tempo decorrido para executar as requisições
+
+## 🚀 Como usar
+
+### Com Docker (Recomendado)
+
+```bash
+docker build -t http-benchmark .
+docker run --rm http-benchmark
+```
+
+### Localmente (requer Ruby 3.2+)
+
+```bash
+# Instalar dependências
+bundle install
+
+# Executar benchmark
+ruby benchmark.rb
+```
+
+## 📈 Interpretando os resultados
+
+Os resultados são adicionados automaticamente ao final deste arquivo, em ordem cronológica. 
+
+- **Memoria baixa + Tempo baixo** = Melhor opção geral
+- **Alocações altas** = Mais pressão no garbage collector
+- **Cada execução faz 10 requisições** para resultados mais confiáveis
+
+## 🔧 Configuração
+
+Para ajustar o número de requisições por gem, edite a constante em `benchmark.rb`:
+
+```ruby
+REQUESTS_PER_GEM = 10  # Aumentar para mais precisão, diminuir para testes rápidos
+```
 
 <!-- benchmark-results -->
 
