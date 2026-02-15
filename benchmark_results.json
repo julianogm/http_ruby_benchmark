@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-02-01T00:36:09+00:00",
-  "date": "2026-02-01",
+  "timestamp": "2026-02-15T00:34:21+00:00",
+  "date": "2026-02-15",
   "scenarios": {
     "light": {
       "name": "Light (1 KB)",
@@ -10,38 +10,38 @@
         {
           "name": "Net::HTTP",
           "memory_kb": 1143,
-          "allocations": 622,
-          "time_seconds": 0.0549
+          "allocations": 623,
+          "time_seconds": 0.0584
         },
         {
           "name": "Faraday",
-          "memory_kb": 1098,
-          "allocations": 617,
-          "time_seconds": 0.0551
+          "memory_kb": 1099,
+          "allocations": 630,
+          "time_seconds": 0.0588
         },
         {
           "name": "HTTParty",
-          "memory_kb": 1052,
-          "allocations": 579,
-          "time_seconds": 0.0545
+          "memory_kb": 991,
+          "allocations": 578,
+          "time_seconds": 0.0557
         },
         {
           "name": "Typhoeus",
           "memory_kb": 82,
           "allocations": 552,
-          "time_seconds": 0.0547
+          "time_seconds": 0.056
         },
         {
           "name": "httpx",
-          "memory_kb": 798,
-          "allocations": 951,
-          "time_seconds": 0.0574
+          "memory_kb": 1002,
+          "allocations": 946,
+          "time_seconds": 0.0593
         },
         {
           "name": "http.rb",
           "memory_kb": 1159,
           "allocations": 1530,
-          "time_seconds": 0.0813
+          "time_seconds": 0.0866
         }
       ]
     },
@@ -52,39 +52,39 @@
       "gems": [
         {
           "name": "Net::HTTP",
-          "memory_kb": 1392,
-          "allocations": 627,
-          "time_seconds": 0.0604
+          "memory_kb": 1390,
+          "allocations": 610,
+          "time_seconds": 0.0508
         },
         {
           "name": "Faraday",
-          "memory_kb": 1322,
-          "allocations": 637,
-          "time_seconds": 0.0597
+          "memory_kb": 1321,
+          "allocations": 634,
+          "time_seconds": 0.0551
         },
         {
           "name": "HTTParty",
           "memory_kb": 1315,
           "allocations": 584,
-          "time_seconds": 0.059
+          "time_seconds": 0.0537
         },
         {
           "name": "Typhoeus",
           "memory_kb": 214,
           "allocations": 571,
-          "time_seconds": 0.0613
+          "time_seconds": 0.0526
         },
         {
           "name": "httpx",
           "memory_kb": 420,
-          "allocations": 1060,
-          "time_seconds": 0.0653
+          "allocations": 1058,
+          "time_seconds": 0.0552
         },
         {
           "name": "http.rb",
           "memory_kb": 1190,
           "allocations": 2016,
-          "time_seconds": 0.0914
+          "time_seconds": 0.0723
         }
       ]
     },
@@ -95,39 +95,39 @@
       "gems": [
         {
           "name": "Net::HTTP",
-          "memory_kb": 4368,
-          "allocations": 688,
-          "time_seconds": 0.0603
+          "memory_kb": 4384,
+          "allocations": 689,
+          "time_seconds": 0.0685
         },
         {
           "name": "Faraday",
-          "memory_kb": 4165,
-          "allocations": 700,
-          "time_seconds": 0.0696
+          "memory_kb": 4190,
+          "allocations": 703,
+          "time_seconds": 0.0647
         },
         {
           "name": "HTTParty",
-          "memory_kb": 4156,
-          "allocations": 643,
-          "time_seconds": 0.0745
+          "memory_kb": 4169,
+          "allocations": 644,
+          "time_seconds": 0.0813
         },
         {
           "name": "Typhoeus",
           "memory_kb": 1489,
-          "allocations": 748,
-          "time_seconds": 0.0712
+          "allocations": 749,
+          "time_seconds": 0.0817
         },
         {
           "name": "httpx",
-          "memory_kb": 2286,
-          "allocations": 1701,
-          "time_seconds": 0.0873
+          "memory_kb": 2222,
+          "allocations": 1723,
+          "time_seconds": 0.0955
         },
         {
           "name": "http.rb",
-          "memory_kb": 1346,
-          "allocations": 4446,
-          "time_seconds": 0.1149
+          "memory_kb": 1247,
+          "allocations": 4453,
+          "time_seconds": 0.1187
         }
       ]
     }
