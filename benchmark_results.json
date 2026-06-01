@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-05-29T00:56:55+00:00",
-  "date": "2026-05-29",
+  "timestamp": "2026-06-01T01:00:17+00:00",
+  "date": "2026-06-01",
   "scenarios": {
     "light": {
       "name": "Light (1 KB)",
@@ -11,37 +11,37 @@
           "name": "Net::HTTP",
           "memory_kb": 1143,
           "allocations": 623,
-          "time_seconds": 0.0631
+          "time_seconds": 0.0566
         },
         {
           "name": "Faraday",
           "memory_kb": 1099,
           "allocations": 630,
-          "time_seconds": 0.0625
+          "time_seconds": 0.0573
         },
         {
           "name": "HTTParty",
-          "memory_kb": 356,
+          "memory_kb": 1073,
           "allocations": 578,
-          "time_seconds": 0.0624
+          "time_seconds": 0.0593
         },
         {
           "name": "Typhoeus",
           "memory_kb": 82,
           "allocations": 552,
-          "time_seconds": 0.0627
+          "time_seconds": 0.0611
         },
         {
           "name": "httpx",
-          "memory_kb": 1063,
-          "allocations": 945,
-          "time_seconds": 0.0669
+          "memory_kb": 818,
+          "allocations": 950,
+          "time_seconds": 0.0656
         },
         {
           "name": "http.rb",
           "memory_kb": 1159,
-          "allocations": 1529,
-          "time_seconds": 0.0984
+          "allocations": 1528,
+          "time_seconds": 0.0909
         }
       ]
     },
@@ -52,39 +52,39 @@
       "gems": [
         {
           "name": "Net::HTTP",
-          "memory_kb": 1392,
-          "allocations": 626,
-          "time_seconds": 0.058
+          "memory_kb": 1391,
+          "allocations": 617,
+          "time_seconds": 0.0568
         },
         {
           "name": "Faraday",
           "memory_kb": 1322,
           "allocations": 637,
-          "time_seconds": 0.0581
+          "time_seconds": 0.0575
         },
         {
           "name": "HTTParty",
           "memory_kb": 1315,
           "allocations": 584,
-          "time_seconds": 0.0577
+          "time_seconds": 0.0572
         },
         {
           "name": "Typhoeus",
           "memory_kb": 214,
           "allocations": 571,
-          "time_seconds": 0.0576
+          "time_seconds": 0.0564
         },
         {
           "name": "httpx",
           "memory_kb": 420,
           "allocations": 1051,
-          "time_seconds": 0.0623
+          "time_seconds": 0.0615
         },
         {
           "name": "http.rb",
           "memory_kb": 1190,
           "allocations": 2016,
-          "time_seconds": 0.0844
+          "time_seconds": 0.0834
         }
       ]
     },
@@ -95,39 +95,39 @@
       "gems": [
         {
           "name": "Net::HTTP",
-          "memory_kb": 4397,
+          "memory_kb": 4394,
           "allocations": 690,
-          "time_seconds": 0.0692
+          "time_seconds": 0.0645
         },
         {
           "name": "Faraday",
-          "memory_kb": 4189,
+          "memory_kb": 4187,
           "allocations": 702,
-          "time_seconds": 0.0627
+          "time_seconds": 0.0644
         },
         {
           "name": "HTTParty",
-          "memory_kb": 4180,
-          "allocations": 645,
-          "time_seconds": 0.0646
+          "memory_kb": 4187,
+          "allocations": 646,
+          "time_seconds": 0.0604
         },
         {
           "name": "Typhoeus",
           "memory_kb": 1489,
-          "allocations": 754,
-          "time_seconds": 0.0633
+          "allocations": 755,
+          "time_seconds": 0.0652
         },
         {
           "name": "httpx",
-          "memory_kb": 2206,
-          "allocations": 1724,
-          "time_seconds": 0.0699
+          "memory_kb": 2210,
+          "allocations": 1726,
+          "time_seconds": 0.0724
         },
         {
           "name": "http.rb",
           "memory_kb": 1348,
-          "allocations": 4454,
-          "time_seconds": 0.0938
+          "allocations": 4456,
+          "time_seconds": 0.1018
         }
       ]
     }
