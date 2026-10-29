@@ -66,39 +66,39 @@ When analyzing the results:
 
 <!-- benchmark-results -->
 
-### HTTP RubyGems Benchmark - 2026-10-15
+### HTTP RubyGems Benchmark - 2026-10-29
 #### Consolidated Results (Light + Normal + Heavy)
 
 **Light (1 KB)** (1 KB, 50 requests)
 
 | Gem | Memory (KB) | Allocations | Time (s) |
 |-----|-----------|------------|----------|
-| Net::HTTP | 1141 | 608 | 0.0464 |
-| Faraday | 1099 | 627 | 0.0466 |
-| HTTParty | 1052 | 576 | 0.0461 |
-| Typhoeus | 82 | 552 | 0.0462 |
-| httpx | 981 | 945 | 0.0491 |
-| http.rb | 995 | 1529 | 0.062 |
+| Net::HTTP | 1143 | 622 | 0.0594 |
+| Faraday | 1099 | 629 | 0.0588 |
+| HTTParty | 376 | 578 | 0.0599 |
+| Typhoeus | 82 | 552 | 0.0573 |
+| httpx | 1043 | 945 | 0.0633 |
+| http.rb | 1159 | 1529 | 0.0883 |
 
 **Normal (100 KB)** (100 KB, 30 requests)
 
 | Gem | Memory (KB) | Allocations | Time (s) |
 |-----|-----------|------------|----------|
-| Net::HTTP | 1392 | 629 | 0.0583 |
-| Faraday | 1322 | 637 | 0.0588 |
-| HTTParty | 1315 | 584 | 0.0543 |
-| Typhoeus | 214 | 571 | 0.0561 |
-| httpx | 420 | 1055 | 0.0601 |
-| http.rb | 1190 | 2016 | 0.0882 |
+| Net::HTTP | 1390 | 610 | 0.1083 |
+| Faraday | 1319 | 616 | 0.1097 |
+| HTTParty | 1315 | 584 | 0.1132 |
+| Typhoeus | 214 | 571 | 0.1124 |
+| httpx | 420 | 1053 | 0.1173 |
+| http.rb | 1190 | 2012 | 0.1367 |
 
 **Heavy (1 MB)** (1024 KB, 10 requests)
 
 | Gem | Memory (KB) | Allocations | Time (s) |
 |-----|-----------|------------|----------|
-| Net::HTTP | 4397 | 690 | 0.0372 |
-| Faraday | 4189 | 702 | 0.037 |
-| HTTParty | 4180 | 645 | 0.0409 |
-| Typhoeus | 1489 | 752 | 0.0369 |
-| httpx | 2213 | 1723 | 0.0468 |
-| http.rb | 1346 | 4449 | 0.0671 |
+| Net::HTTP | 4405 | 690 | 0.0483 |
+| Faraday | 4197 | 702 | 0.0481 |
+| HTTParty | 4185 | 645 | 0.0481 |
+| Typhoeus | 1489 | 750 | 0.0477 |
+| httpx | 2222 | 1723 | 0.0541 |
+| http.rb | 1347 | 4451 | 0.0758 |
 

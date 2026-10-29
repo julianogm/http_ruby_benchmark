@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-15T03:29:52+00:00",
-  "date": "2026-10-15",
+  "timestamp": "2026-10-29T04:41:04+00:00",
+  "date": "2026-10-29",
   "scenarios": {
     "light": {
       "name": "Light (1 KB)",
@@ -9,39 +9,39 @@
       "gems": [
         {
           "name": "Net::HTTP",
-          "memory_kb": 1141,
-          "allocations": 608,
-          "time_seconds": 0.0464
+          "memory_kb": 1143,
+          "allocations": 622,
+          "time_seconds": 0.0594
         },
         {
           "name": "Faraday",
           "memory_kb": 1099,
-          "allocations": 627,
-          "time_seconds": 0.0466
+          "allocations": 629,
+          "time_seconds": 0.0588
         },
         {
           "name": "HTTParty",
-          "memory_kb": 1052,
-          "allocations": 576,
-          "time_seconds": 0.0461
+          "memory_kb": 376,
+          "allocations": 578,
+          "time_seconds": 0.0599
         },
         {
           "name": "Typhoeus",
           "memory_kb": 82,
           "allocations": 552,
-          "time_seconds": 0.0462
+          "time_seconds": 0.0573
         },
         {
           "name": "httpx",
-          "memory_kb": 981,
+          "memory_kb": 1043,
           "allocations": 945,
-          "time_seconds": 0.0491
+          "time_seconds": 0.0633
         },
         {
           "name": "http.rb",
-          "memory_kb": 995,
+          "memory_kb": 1159,
           "allocations": 1529,
-          "time_seconds": 0.062
+          "time_seconds": 0.0883
         }
       ]
     },
@@ -52,39 +52,39 @@
       "gems": [
         {
           "name": "Net::HTTP",
-          "memory_kb": 1392,
-          "allocations": 629,
-          "time_seconds": 0.0583
+          "memory_kb": 1390,
+          "allocations": 610,
+          "time_seconds": 0.1083
         },
         {
           "name": "Faraday",
-          "memory_kb": 1322,
-          "allocations": 637,
-          "time_seconds": 0.0588
+          "memory_kb": 1319,
+          "allocations": 616,
+          "time_seconds": 0.1097
         },
         {
           "name": "HTTParty",
           "memory_kb": 1315,
           "allocations": 584,
-          "time_seconds": 0.0543
+          "time_seconds": 0.1132
         },
         {
           "name": "Typhoeus",
           "memory_kb": 214,
           "allocations": 571,
-          "time_seconds": 0.0561
+          "time_seconds": 0.1124
         },
         {
           "name": "httpx",
           "memory_kb": 420,
-          "allocations": 1055,
-          "time_seconds": 0.0601
+          "allocations": 1053,
+          "time_seconds": 0.1173
         },
         {
           "name": "http.rb",
           "memory_kb": 1190,
-          "allocations": 2016,
-          "time_seconds": 0.0882
+          "allocations": 2012,
+          "time_seconds": 0.1367
         }
       ]
     },
@@ -95,39 +95,39 @@
       "gems": [
         {
           "name": "Net::HTTP",
-          "memory_kb": 4397,
+          "memory_kb": 4405,
           "allocations": 690,
-          "time_seconds": 0.0372
+          "time_seconds": 0.0483
         },
         {
           "name": "Faraday",
-          "memory_kb": 4189,
+          "memory_kb": 4197,
           "allocations": 702,
-          "time_seconds": 0.037
+          "time_seconds": 0.0481
         },
         {
           "name": "HTTParty",
-          "memory_kb": 4180,
+          "memory_kb": 4185,
           "allocations": 645,
-          "time_seconds": 0.0409
+          "time_seconds": 0.0481
         },
         {
           "name": "Typhoeus",
           "memory_kb": 1489,
-          "allocations": 752,
-          "time_seconds": 0.0369
+          "allocations": 750,
+          "time_seconds": 0.0477
         },
         {
           "name": "httpx",
-          "memory_kb": 2213,
+          "memory_kb": 2222,
           "allocations": 1723,
-          "time_seconds": 0.0468
+          "time_seconds": 0.0541
         },
         {
           "name": "http.rb",
-          "memory_kb": 1346,
-          "allocations": 4449,
-          "time_seconds": 0.0671
+          "memory_kb": 1347,
+          "allocations": 4451,
+          "time_seconds": 0.0758
         }
       ]
     }
